@@ -18,6 +18,10 @@ public class PlayerController : MonoBehaviour
 
     public Spells spells;
 
+    public bool hasRelicOne = false;
+    public bool hasRelicTwo = false;
+    public bool hasRelicThree = false;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -60,6 +64,31 @@ public class PlayerController : MonoBehaviour
             jump = false;
         }
 
+    }
+
+    public void HasRelicOne()
+    {
+        hasRelicOne = true;
+    }
+    public bool CheckHasRelicOne()
+    {
+        return hasRelicOne;
+    }
+    public void HasRelicTwo()
+    {
+        hasRelicTwo = true;
+    }
+    public bool CheckHasRelicTwo()
+    {
+        return hasRelicTwo;
+    }
+    public void HasRelicThree()
+    {
+        hasRelicThree = true;
+    }
+    public bool CheckHasRelicThree()
+    {
+        return hasRelicThree;
     }
 
     /*public void SpellBuffs()
