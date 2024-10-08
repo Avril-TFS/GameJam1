@@ -39,10 +39,10 @@ public class SimpleSpells : MonoBehaviour
         {
             CastSpell("Surprise");
         }
-        if (Input.GetKeyDown(KeyCode.Alpha7))
-        {
-            CastSpell("Neutra;");
-        }
+        // if (Input.GetKeyDown(KeyCode.Alpha7))
+        //{
+        //   CastSpell("Neutral");
+        //}
     }
     public void CastSpell(string spell)
     {
@@ -72,36 +72,53 @@ public class SimpleSpells : MonoBehaviour
                 CastSurpriseSpell();
                 break;
 
-            case "Neutral":
-                // We dont have a spell for this, also in neutral an emotion?
-                break;
+                //  case "Neutral":
+                // We dont have a spell for this, also is neutral an emotion?
+                //   break;
         }
     }
     void CastAngrySpell()
     {
         // FIRE!
         Debug.Log("Cast Fire");
+        playerController.BaseSpeed();
+        playerController.FireBall();
     }
     void CastDisgustSpell()
     {
         // Knockback
+        Debug.Log("Cast Disgust");
+        playerController.BaseSpeed();
+        playerController.KnockBack();
     }
     void CastFearSpell()
     {
-        //move slower now, might implement slowed movement here might implement it in player controller
+        //move slower and cause self damage
+        Debug.Log("Cast Fear");
+        playerController.SlowDown();
+        playerController.Damage(5);
     }
     void CastHappySpell()
     {
-        //health
+        //healing
         // Flashlight, I think I want to do on the player controller script
+        Debug.Log("Cast Happy");
+        playerController.BaseSpeed();
+        playerController.Healing(5);
     }
     void CastSadSpell()
     {
         // splish splash
+        // damage spell, and self slow
+        Debug.Log("Cast Sad");
+        playerController.SlowDown();
+        playerController.Splash();
     }
     void CastSurpriseSpell()
     {
-        // Speed boost, again not sure if I want it here or in player Controller
+        // Speed boost
+        Debug.Log("Cast Surprise");
+        playerController.SpeedUp();
     }
     //void CastNeutralSpell(){} does this exist?
 }
