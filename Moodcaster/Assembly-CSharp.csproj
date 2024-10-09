@@ -42,10 +42,12 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\SimpleSpells.cs" />
      <Compile Include="Assets\Scripts\Spells.cs" />
+     <Compile Include="Assets\Scripts\EnemyController.cs" />
      <Compile Include="Assets\Scripts\Collectibles.cs" />
      <Compile Include="Assets\Scripts\GameManager.cs" />
      <Compile Include="Assets\Scripts\ExitDoor.cs" />
      <Compile Include="Assets\Scripts\PlayerController.cs" />
+     <Compile Include="Assets\Scripts\FireBall.cs" />
      <Compile Include="Assets\Scripts\CameraController.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:\Program Files\Unity\Hub\Editor\2022.3.4f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>

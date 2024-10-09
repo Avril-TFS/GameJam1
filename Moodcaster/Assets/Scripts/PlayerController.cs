@@ -125,13 +125,44 @@ public class PlayerController : MonoBehaviour
         GameObject fireBall = Instantiate(firePrefab, fireBallCastPoint.position, fireBallCastPoint.rotation);
         Destroy(fireBall, 8.0f);
     }
-    public void KnockBack()
+    public void KnockBack(float radius, float kockBackForce)
     {
-        //Knockback Logic goes here
+        Collider[] cols = Physics.OverlapSphere(transform.position, radius);
+
+        foreach (Collider hit in cols)
+        {
+            Rigidbody otherRgbd = hit.GetComponent<Rigidbody>();
+
+            if (otherRgbd != null && otherRgbd != rgbd)
+            {
+                Vector3 direction = (hit.transform.position - transform.position).normalized;
+
+                otherRgbd.AddForce(direction * kockBackForce, ForceMode.Impulse);
+            }
+        }
     }
-    public void Splash()
+    public void Splash(float radius, int damageAmount, float slowAmount, float slowTime)
     {
-        //water spell logic goes here
+        Collider[] cols = Physics.OverlapSphere(transform.position, radius);
+
+        foreach (Collider hit in cols)
+        {
+            EnemyController enemy = hit.GetComponent<EnemyController>();
+
+            if (enemy != null)
+            {
+                enemy.TakeDamage(damageAmount);
+
+                StartCoroutine(ApplySlow(enemy, slowAmount, slowTime));
+            }
+        }
+    }
+    private IEnumerator ApplySlow(EnemyController enemy, float slowAmount, float duration)
+    {
+        float originalSpeed = enemy.moveSpeed;
+        enemy.moveSpeed *= slowAmount;
+        yield return new WaitForSeconds(duration);
+        enemy.moveSpeed = originalSpeed;
     }
     public void EarthBolt()
     {

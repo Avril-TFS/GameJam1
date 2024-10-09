@@ -89,7 +89,7 @@ public class SimpleSpells : MonoBehaviour
         // Knockback
         Debug.Log("Cast Disgust");
         playerController.BaseSpeed();
-        playerController.KnockBack();
+        playerController.KnockBack(10f, 25f);
     }
     void CastFearSpell()
     {
@@ -112,7 +112,7 @@ public class SimpleSpells : MonoBehaviour
         // damage spell, and self slow
         Debug.Log("Cast Sad");
         playerController.SlowDown();
-        playerController.Splash();
+        playerController.Splash(5f, 20, .5f, 5f);  // radius, damage, slowAmount, and slow duration
     }
     void CastSurpriseSpell()
     {
