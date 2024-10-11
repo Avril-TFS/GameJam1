@@ -97,6 +97,7 @@ public class SimpleSpells : MonoBehaviour
         Debug.Log("Cast Fear");
         playerController.SlowDown();
         playerController.Damage(5);
+        playerController.FearSound();
     }
     void CastHappySpell()
     {
@@ -105,6 +106,7 @@ public class SimpleSpells : MonoBehaviour
         Debug.Log("Cast Happy");
         playerController.BaseSpeed();
         playerController.Healing(5);
+        playerController.HappySoud();
     }
     void CastSadSpell()
     {
@@ -119,6 +121,7 @@ public class SimpleSpells : MonoBehaviour
         // Speed boost
         Debug.Log("Cast Surprise");
         playerController.SpeedUp();
+        playerController.ExcitedSound();
     }
     //void CastNeutralSpell(){} does this exist?
 }

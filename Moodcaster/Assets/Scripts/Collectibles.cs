@@ -38,6 +38,10 @@ public class Collectibles : MonoBehaviour
             {
                 col.GetComponent<PlayerController>().HasRelicThree();
             }
+            if (collectibleType == CollectibleType.health)
+            {
+                col.GetComponent<PlayerController>().Potion(25);
+            }
         }
     }
 }

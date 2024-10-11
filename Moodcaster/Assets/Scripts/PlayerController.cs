@@ -4,16 +4,25 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float baseSpeed = 5.0f;
+    public float baseSpeed = 10.0f;
     public float moveSpeed; // this will be edited by the emotions so we can increase and decrease without having to add or take away movement speed
     public float jumpForce = 10.0f;
     public float downwardForce = 9.8f;
     private Rigidbody rgbd;
     public LayerMask groundLayer;
     public Transform groundCheck;
+
     public bool isGrounded = false;
     public bool jump = false;
 
+    public float crouchSpeed = 5.0f;
+    public bool isCrouched = false;
+    public Camera playerCamera;
+    private float playerCrouchCamera = 1.5f;
+    private Vector3 playerCameraPosition;
+    private CapsuleCollider playerCollider;
+    private float colliderPosition;
+    public float crouchColliderPosition = .2f;
     public int health = 100;
 
     public Spells spells;
@@ -24,11 +33,27 @@ public class PlayerController : MonoBehaviour
     public GameObject firePrefab;
     public Transform fireBallCastPoint;
 
+    public GameManager gameManager;
+    public AudioSource audioSource;
+    public AudioClip fireballSound;
+    public AudioClip disgustSound;
+    public AudioClip fearSound;
+    public AudioClip sadSound;
+    public AudioClip happySound;
+    public AudioClip excitedSound;
+
     // Start is called before the first frame update
     void Start()
     {
         rgbd = GetComponent<Rigidbody>();
         moveSpeed = baseSpeed;
+
+        playerCameraPosition = playerCamera.transform.localPosition;
+        playerCollider = GetComponent<CapsuleCollider>();
+        colliderPosition = playerCollider.height;
+
+        gameManager = GameObject.FindObjectOfType<GameManager>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -44,6 +69,11 @@ public class PlayerController : MonoBehaviour
             rgbd.AddForce(Vector3.down * downwardForce, ForceMode.Acceleration);
         }
         // SpellBuffs();
+
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            Crouch();
+        }
     }
 
     void FixedUpdate()
@@ -65,9 +95,31 @@ public class PlayerController : MonoBehaviour
             rgbd.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             jump = false;
         }
-
     }
 
+    public void Crouch()
+    {
+        if (isCrouched != true)
+        {
+            moveSpeed = crouchSpeed;
+            isCrouched = true;
+
+            playerCamera.transform.localPosition = new Vector3(playerCameraPosition.x, playerCameraPosition.y - playerCrouchCamera, playerCameraPosition.z);
+
+            playerCollider.height = crouchColliderPosition;
+            playerCollider.center = new Vector3(playerCollider.center.x, playerCollider.center.y - (colliderPosition - crouchColliderPosition) / 2, playerCollider.center.z);
+        }
+        else if (isCrouched != false)
+        {
+            moveSpeed = baseSpeed;
+            isCrouched = false;
+
+            playerCamera.transform.localPosition = playerCameraPosition;
+
+            playerCollider.height = colliderPosition;
+            playerCollider.center = new Vector3(playerCollider.center.x, playerCollider.center.y + (colliderPosition - crouchColliderPosition) / 2, playerCollider.center.z);
+        }
+    }
     public void HasRelicOne()
     {
         hasRelicOne = true;
@@ -91,6 +143,12 @@ public class PlayerController : MonoBehaviour
     public bool CheckHasRelicThree()
     {
         return hasRelicThree;
+    }
+    public void Potion(int amount)
+    {
+        health += amount;
+
+        health = Mathf.Clamp(health, 0, 100);
     }
 
     public void SlowDown()
@@ -119,11 +177,18 @@ public class PlayerController : MonoBehaviour
         health -= amount;
         health = Mathf.Clamp(health, 0, 100);
         Debug.Log("Health = " + health);
+
+        if (health <= 0)
+        {
+            gameManager.GameOver();
+        }
     }
     public void FireBall()
     {
         GameObject fireBall = Instantiate(firePrefab, fireBallCastPoint.position, fireBallCastPoint.rotation);
         Destroy(fireBall, 8.0f);
+
+        audioSource.PlayOneShot(fireballSound);
     }
     public void KnockBack(float radius, float kockBackForce)
     {
@@ -140,6 +205,7 @@ public class PlayerController : MonoBehaviour
                 otherRgbd.AddForce(direction * kockBackForce, ForceMode.Impulse);
             }
         }
+        audioSource.PlayOneShot(disgustSound);
     }
     public void Splash(float radius, int damageAmount, float slowAmount, float slowTime)
     {
@@ -156,6 +222,19 @@ public class PlayerController : MonoBehaviour
                 StartCoroutine(ApplySlow(enemy, slowAmount, slowTime));
             }
         }
+        audioSource.PlayOneShot(sadSound);
+    }
+    public void FearSound()
+    {
+        audioSource.PlayOneShot(fearSound);
+    }
+    public void HappySoud()
+    {
+        audioSource.PlayOneShot(happySound);
+    }
+    public void ExcitedSound()
+    {
+        audioSource.PlayOneShot(excitedSound);
     }
     private IEnumerator ApplySlow(EnemyController enemy, float slowAmount, float duration)
     {
