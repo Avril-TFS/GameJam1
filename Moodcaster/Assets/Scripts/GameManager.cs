@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public Text gameOverText;
     public Button restartButton;
     public Text healthText;
+    public Text spellText;
+    public Text victoryText;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,15 @@ public class GameManager : MonoBehaviour
 
         healthText.text = "Health: " + playerHealth;
     }
+    public void Victory()
+    {
+        Time.timeScale = 0;
+        victoryText.text = "Congratulations!\n\nYou made it through the dungeon!";
+        restartButton.gameObject.SetActive(true);
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+    }
     public void GameOver()
     {
         Time.timeScale = 0;
@@ -49,5 +60,29 @@ public class GameManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
 
         Debug.Log("Restart");
+    }
+    public void AngerSpellText()
+    {
+        spellText.text = "Emotion detected: Anger! Cast Iratus Ignis!";
+    }
+    public void DisgustSpellText()
+    {
+        spellText.text = "Emotion detected: Disgust! Cast Impulsum!";
+    }
+    public void FearSpellText()
+    {
+        spellText.text = "Emotion detected: Fear! Cast Noctis Timor!";
+    }
+    public void SadSpellText()
+    {
+        spellText.text = "Emotion detected: Sadness. Cast Lacrimae!";
+    }
+    public void HappySpellText()
+    {
+        spellText.text = "Emotion detected: Happiness. Cast Radiatus!";
+    }
+    public void ExcitedSpellText()
+    {
+        spellText.text = "Emotion detected: Excitement! Cast Celeritas!";
     }
 }

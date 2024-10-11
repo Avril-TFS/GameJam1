@@ -42,6 +42,11 @@ public class PlayerController : MonoBehaviour
     public AudioClip happySound;
     public AudioClip excitedSound;
 
+    public enum Emotion { Anger, Disgust, Fear, Happy, Sad, Excited }
+    public Emotion emotion;
+    public enum SpellName { Iratus_Ignis, Impulsum, Noctis_Timor, Radiatus, Lacrimae, Celeritas }
+    public SpellName spellName;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -183,14 +188,23 @@ public class PlayerController : MonoBehaviour
             gameManager.GameOver();
         }
     }
-    public void FireBall()
+    void OnCollisionEnter(Collision col)
+    {
+        if (col.gameObject.CompareTag("Exit"))
+        {
+            gameManager.Victory();
+        }
+    }
+    public void FireBall()  // Anger spell
     {
         GameObject fireBall = Instantiate(firePrefab, fireBallCastPoint.position, fireBallCastPoint.rotation);
         Destroy(fireBall, 8.0f);
 
         audioSource.PlayOneShot(fireballSound);
+
+        gameManager.AngerSpellText();
     }
-    public void KnockBack(float radius, float kockBackForce)
+    public void KnockBack(float radius, float kockBackForce) // Disgust Spell
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, radius);
 
@@ -206,8 +220,9 @@ public class PlayerController : MonoBehaviour
             }
         }
         audioSource.PlayOneShot(disgustSound);
+        gameManager.DisgustSpellText();
     }
-    public void Splash(float radius, int damageAmount, float slowAmount, float slowTime)
+    public void Splash(float radius, int damageAmount, float slowAmount, float slowTime) // sad SPell
     {
         Collider[] cols = Physics.OverlapSphere(transform.position, radius);
 
@@ -223,18 +238,23 @@ public class PlayerController : MonoBehaviour
             }
         }
         audioSource.PlayOneShot(sadSound);
+        gameManager.SadSpellText();
     }
-    public void FearSound()
+    public void FearSound()     // Fear Spell
     {
         audioSource.PlayOneShot(fearSound);
+        gameManager.FearSpellText();
+
     }
-    public void HappySoud()
+    public void HappySoud() // Happy Spell
     {
         audioSource.PlayOneShot(happySound);
+        gameManager.HappySpellText();
     }
-    public void ExcitedSound()
+    public void ExcitedSound()      // Excited Spell
     {
         audioSource.PlayOneShot(excitedSound);
+        gameManager.ExcitedSpellText();
     }
     private IEnumerator ApplySlow(EnemyController enemy, float slowAmount, float duration)
     {
